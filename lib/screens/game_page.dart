@@ -3,8 +3,10 @@ import 'package:memory_game/custom_widgets/memory_card.dart';
 import 'package:memory_game/size_config.dart';
 
 class GamePage extends StatelessWidget {
-
-  List<MemoryCard> list =  [MemoryCard(cardColor: Colors.tealAccent, cardIcon: Icons.create), MemoryCard(cardColor: Colors.tealAccent, cardIcon: Icons.create)];
+  List<MemoryCard> list = [
+    MemoryCard(cardColor: Colors.tealAccent, cardIcon: Icons.create),
+    MemoryCard(cardColor: Colors.tealAccent, cardIcon: Icons.create)
+  ];
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -30,25 +32,31 @@ class GamePage extends StatelessWidget {
                     ),
                     Expanded(
                       flex: 10,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3.7),
-                        child: GridView.builder(
-                          itemCount: list.length,
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 5,
-                          ),
-                          physics: NeverScrollableScrollPhysics(),
-                          itemBuilder: (BuildContext context, int index) {
-                            return list[index];
-                          },
-                        ),
-                      ),
+                      child: _buildGameCardsGridView(),
                     ),
                   ],
                 ),
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Center _buildGameScreenTitle() {
+    return Center(
+      child: Hero(
+        tag: 'title',
+        child: Text(
+          'Memory Game',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontFamily: 'Caveat',
+            color: Colors.tealAccent,
+            fontWeight: FontWeight.w600,
+            fontSize: SizeConfig.textMultiplier * 6.3,
+          ),
         ),
       ),
     );
@@ -80,17 +88,19 @@ class GamePage extends StatelessWidget {
     );
   }
 
-  Center _buildGameScreenTitle() {
-    return Center(
-      child: Text(
-        'Memory Game',
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontFamily: 'Caveat',
-          color: Colors.tealAccent,
-          fontWeight: FontWeight.w600,
-          fontSize: SizeConfig.textMultiplier * 6.3,
+  Container _buildGameCardsGridView() {
+    return Container(
+      padding:
+      EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3.7),
+      child: GridView.builder(
+        itemCount: list.length,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 5,
         ),
+        physics: NeverScrollableScrollPhysics(),
+        itemBuilder: (BuildContext context, int index) {
+          return list[index];
+        },
       ),
     );
   }
