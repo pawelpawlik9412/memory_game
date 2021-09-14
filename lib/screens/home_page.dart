@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memory_game/screens/game_page.dart';
 import 'package:memory_game/screens/score_page.dart';
+import 'package:memory_game/screens/settings_page.dart';
 import 'package:memory_game/size_config.dart';
 
 
@@ -30,7 +31,7 @@ class _HomePageState extends State<HomePage> {
       return ScorePage();
     }
     else if(_currentPage == 2) {
-      return Center(child: Text('2'));
+      return SettingsPage();
     }
   }
 
