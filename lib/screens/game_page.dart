@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:memory_game/bloc/memories_set_bloc.dart';
+import 'package:memory_game/custom_widgets/gradient_button.dart';
 import 'package:memory_game/custom_widgets/memory_card.dart';
+import 'package:memory_game/model/memory.dart';
 import 'package:memory_game/size_config.dart';
 
 class GamePage extends StatelessWidget {
-  List<MemoryCard> list = [
-    MemoryCard(cardColor: Colors.tealAccent, cardIcon: Icons.create),
-    MemoryCard(cardColor: Colors.tealAccent, cardIcon: Icons.create)
-  ];
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -32,7 +33,37 @@ class GamePage extends StatelessWidget {
                     ),
                     Expanded(
                       flex: 10,
-                      child: _buildGameCardsGridView(),
+                      child: BlocBuilder<MemoriesSetBloc, MemoriesSetState>(
+                        builder: (context, state) {
+                          if(state is MemoriesSetLoading) {
+                            return Center(child: CircularProgressIndicator(),);
+                          }
+                          if(state is MemoriesSetLoaded) {
+                            return _buildGameCardsGridView(state.memoriesSet);
+                          }
+                          if(state is MemoriesSetUpdated) {
+                            return _buildGameCardsGridView(state.memoriesSet);
+                          }
+                          if(state is MemoriesSetInitial) {
+                            return Center(
+                              child: GradientButton(label: 'Play', onPressed: () {
+                                BlocProvider.of<MemoriesSetBloc>(context)
+                                    .add(GenerateMemoriesSet());
+                              }
+                              ),
+                            );
+                          }
+                          if(state is MemoriesFinished) {
+                            return GradientButton(label: 'Play again', onPressed: () {
+                              BlocProvider.of<MemoriesSetBloc>(context)
+                                  .add(GenerateMemoriesSet());
+                            },);
+                          }
+                          else {
+                            return Center(child: Text('Something goes wrong'),);
+                          }
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -88,7 +119,7 @@ class GamePage extends StatelessWidget {
     );
   }
 
-  Container _buildGameCardsGridView() {
+  Container _buildGameCardsGridView(List<Memory> list) {
     return Container(
       padding:
       EdgeInsets.symmetric(horizontal: SizeConfig.widthMultiplier * 3.7),
@@ -99,9 +130,15 @@ class GamePage extends StatelessWidget {
         ),
         physics: NeverScrollableScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
-          return list[index];
+          return MemoryCard(
+            id: list[index].id,
+            cardColor: list[index].color,
+            cardIcon: list[index].cardIcon,
+            cardState: list[index].cardState,
+          );
         },
       ),
     );
   }
 }
+

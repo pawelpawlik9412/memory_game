@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:memory_game/game_logic.dart';
 import 'package:memory_game/size_config.dart';
 import 'package:memory_game/custom_widgets/gradient_button.dart';
 import 'package:memory_game/custom_widgets/user_name_form_field.dart';

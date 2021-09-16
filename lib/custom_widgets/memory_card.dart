@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:memory_game/constants/enums.dart';
 import 'package:memory_game/size_config.dart';
 
 class MemoryCard extends StatelessWidget {
+  final String id;
   final Color cardColor;
   final IconData cardIcon;
+  final CardState cardState;
 
-  MemoryCard({@required this.cardColor, @required this.cardIcon});
+  MemoryCard({@ required this.id, @required this.cardColor, @required this.cardIcon, @required this.cardState});
 
   @override
   Widget build(BuildContext context) {

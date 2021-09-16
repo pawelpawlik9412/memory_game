@@ -35,8 +35,8 @@ class GameLogic {
   List<Memory> _finalMemoryList = [];
   List<String> _chosenMemoryCards = [];
 
-  get finalMemoryList => _finalMemoryList;
-  get chosenMemoryCardsLength => _chosenMemoryCards.length;
+  List<Memory> get finalMemoryList => _finalMemoryList;
+  int get chosenMemoryCardsLength => _chosenMemoryCards.length;
 
   bool generateListOfMemory(int numberOfMemoryCard) {
     _chosenMemoryCards.clear();

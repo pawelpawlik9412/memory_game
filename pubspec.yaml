@@ -15,7 +15,7 @@ dependencies:
   equatable: ^2.0.3
   random_color: ^1.0.5
   uuid: ^3.0.4
-
+  flutter_bloc: ^7.2.0
 
 
 dev_dependencies:
