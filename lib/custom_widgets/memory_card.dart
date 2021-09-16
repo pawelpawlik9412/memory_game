@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:memory_game/size_config.dart';
 
 class MemoryCard extends StatelessWidget {
-  Color cardColor;
-  IconData cardIcon;
+  final Color cardColor;
+  final IconData cardIcon;
 
   MemoryCard({@required this.cardColor, @required this.cardIcon});
 

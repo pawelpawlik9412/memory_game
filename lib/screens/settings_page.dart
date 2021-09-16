@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:memory_game/game_logic.dart';
 import 'package:memory_game/size_config.dart';
 import 'package:memory_game/custom_widgets/gradient_button.dart';
 import 'package:memory_game/custom_widgets/user_name_form_field.dart';
 
 class SettingsPage extends StatelessWidget {
 
-  TextEditingController _userNameController = TextEditingController();
+  final TextEditingController _userNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -78,9 +79,6 @@ class SettingsPage extends StatelessWidget {
 }
 
 class GameSettingsSegment extends StatelessWidget {
-  const GameSettingsSegment({
-    Key key,
-  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +109,9 @@ class GameSettingsSegment extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            GradientButton(label: 'Reset')
+            GradientButton(label: 'Reset', onPressed: () {
+              },
+            )
           ],
         ),
       ],
@@ -157,6 +157,8 @@ class PlayerSettingsSegment extends StatelessWidget {
             ),
             GradientButton(
               label: 'Change',
+              onPressed: () {
+              },
             ),
           ],
         ),

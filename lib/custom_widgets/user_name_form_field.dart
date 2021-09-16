@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:memory_game/size_config.dart';
 
 class UserNameFormField extends StatelessWidget {
-  TextEditingController userNameController;
+  final TextEditingController userNameController;
 
   UserNameFormField({
     @required this.userNameController,

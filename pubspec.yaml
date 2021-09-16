@@ -13,6 +13,9 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
   equatable: ^2.0.3
+  random_color: ^1.0.5
+  uuid: ^3.0.4
+
 
 
 dev_dependencies:
