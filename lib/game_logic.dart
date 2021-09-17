@@ -57,8 +57,6 @@ class GameLogic {
     return true;
   }
 
-
-  // Methods to generate random Images and Colors for Memory Cards Sets
   IconData getRandomIcon(List list) {
     var random = Random();
     var i = random.nextInt(list.length);
@@ -72,4 +70,85 @@ class GameLogic {
       colorBrightness: ColorBrightness.light,
     );
   }
+
+  void choseCard(String id) {
+    if (_chosenMemoryCards.length == 0) {
+      _chosenMemoryCards.add(id);
+      changeStateCartToChosen(id);
+    }
+    if (_chosenMemoryCards.length == 1) {
+      if (_chosenMemoryCards.contains(id)) {
+        return;
+      } else {
+        _chosenMemoryCards.add(id);
+        changeStateCartToChosen(id);
+      }
+    }
+  }
+
+  void changeStateCartToChosen(String id) {
+    for(Memory memory in _finalMemoryList) {
+      if (memory.id == id) {
+        memory.cardState = CardState.Chosen;
+      }
+    }
+  }
+
+  bool checkMatch() {
+    Memory firstMemory = getMemoryCardById(_chosenMemoryCards[0]);
+    Memory secondMemory = getMemoryCardById(_chosenMemoryCards[1]);
+    if (firstMemory.cardIcon == secondMemory.cardIcon &&
+        firstMemory.color == secondMemory.color) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Memory getMemoryCardById(String id) {
+    for (var x in _finalMemoryList) {
+      if (x.id == id) {
+        return x;
+      }
+    }
+  }
+
+  void pairMatchTrue() {
+    for (Memory memory in _finalMemoryList) {
+      for (String id in _chosenMemoryCards) {
+        if (memory.id == id) {
+          memory.cardState = CardState.Guessed;
+        }
+      }
+    }
+  }
+
+  void pairMatchFalse() {
+    for (Memory memory in _finalMemoryList) {
+      for (String id in _chosenMemoryCards) {
+        if (memory.id == id) {
+          memory.cardState = CardState.Hidden;
+        }
+      }
+    }
+  }
+
+  bool checkIfAllMemoriesGuessed() {
+    List<CardState> stateList = [];
+    for (var x in _finalMemoryList) {
+      stateList.add(x.cardState);
+    }
+    if (stateList.contains(CardState.Hidden) ||
+        stateList.contains(CardState.Chosen)) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  void chosenMemoryCardManager() {
+    checkMatch() ? pairMatchTrue() : pairMatchFalse();
+    _chosenMemoryCards.clear();
+  }
+
 }

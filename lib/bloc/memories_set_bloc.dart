@@ -29,5 +29,26 @@ class MemoriesSetBloc extends Bloc<MemoriesSetEvent, MemoriesSetState> {
         yield MemoriesSetError();
       }
     }
+    if(event is ChosseMemoryFromSet) {
+      _gameLogic.choseCard(event.cardId);
+      var memoriesSet = _gameLogic.finalMemoryList;
+      yield MemoriesSetUpdated(memoriesSet);
+      yield MemoriesSetLoaded(memoriesSet);
+
+      if(_gameLogic.chosenMemoryCardsLength == 2) {
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+        _gameLogic.chosenMemoryCardManager();
+        var memoriesSet = _gameLogic.finalMemoryList;
+        yield MemoriesSetUpdated(memoriesSet);
+        yield MemoriesSetLoaded(memoriesSet);
+        if(_gameLogic.checkIfAllMemoriesGuessed()) {
+          var memoriesSet = _gameLogic.finalMemoryList;
+          yield MemoriesSetLoaded(memoriesSet);
+          await Future<void>.delayed(const Duration(seconds: 1));
+          yield MemoriesFinished();
+        }
+      }
+
+    }
   }
 }
