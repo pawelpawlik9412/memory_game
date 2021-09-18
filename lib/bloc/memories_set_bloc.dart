@@ -34,7 +34,6 @@ class MemoriesSetBloc extends Bloc<MemoriesSetEvent, MemoriesSetState> {
       var memoriesSet = _gameLogic.finalMemoryList;
       yield MemoriesSetUpdated(memoriesSet);
       yield MemoriesSetLoaded(memoriesSet);
-
       if(_gameLogic.chosenMemoryCardsLength == 2) {
         await Future<void>.delayed(const Duration(milliseconds: 500));
         _gameLogic.chosenMemoryCardManager();

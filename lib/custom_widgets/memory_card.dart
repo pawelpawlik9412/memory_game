@@ -10,7 +10,11 @@ class MemoryCard extends StatelessWidget {
   final IconData cardIcon;
   final CardState cardState;
 
-  MemoryCard({@ required this.id, @required this.cardColor, @required this.cardIcon, @required this.cardState});
+  MemoryCard(
+      {@required this.id,
+      @required this.cardColor,
+      @required this.cardIcon,
+      @required this.cardState});
 
   @override
   Widget build(BuildContext context) {
@@ -18,41 +22,64 @@ class MemoryCard extends StatelessWidget {
       padding: EdgeInsets.all(SizeConfig.widthMultiplier),
       child: GestureDetector(
         onTap: () {
-          if(cardState == CardState.Hidden) {
-            BlocProvider.of<MemoriesSetBloc>(context).add(ChosseMemoryFromSet(id));
+          if (cardState == CardState.Hidden) {
+            BlocProvider.of<MemoriesSetBloc>(context)
+                .add(ChosseMemoryFromSet(id));
           }
         },
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(SizeConfig.heightMultiplier),
-            color: _getCardColor(),
-          ),
-          child: FittedBox(
-            fit: BoxFit.fill,
-            child: Container(
-              padding: EdgeInsets.all(SizeConfig.widthMultiplier * 1.5),
-              child: Icon(_getCardIcon()),
-            ),
-          ),
+        child: cardState == CardState.Guessed ? _guessedCard() : _notGuessedCard(),
+      ),
+    );
+  }
+
+  _notGuessedCard() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        color: _getCardColor(),
+      ),
+      child: FittedBox(
+        fit: BoxFit.fill,
+        child: Icon(
+          _getCardIcon(),
         ),
       ),
     );
   }
 
+  _guessedCard() {
+    return TweenAnimationBuilder(
+      tween: ColorTween(begin: cardColor, end: Colors.grey.withOpacity(0.5)),
+      duration: Duration(milliseconds: 300),
+      builder: (_, Color color, __) {
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+            color: color,
+          ),
+          child: FittedBox(
+            fit: BoxFit.fill,
+            child: Icon(
+              _getCardIcon(),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Color _getCardColor() {
-    if(cardState == CardState.Hidden) {
+    if (cardState == CardState.Hidden) {
       return Colors.tealAccent;
-    }
-    else {
+    } else {
       return cardColor;
     }
   }
 
   IconData _getCardIcon() {
-    if(cardState == CardState.Hidden) {
+    if (cardState == CardState.Hidden) {
       return null;
-    }
-    else {
+    } else {
       return cardIcon;
     }
   }

@@ -54,10 +54,14 @@ class GamePage extends StatelessWidget {
                             );
                           }
                           if(state is MemoriesFinished) {
-                            return GradientButton(label: 'Play again', onPressed: () {
-                              BlocProvider.of<MemoriesSetBloc>(context)
-                                  .add(GenerateMemoriesSet());
-                            },);
+                            return Container(
+                              child: Center(
+                                child: GradientButton(label: 'Play again', onPressed: () {
+                                  BlocProvider.of<MemoriesSetBloc>(context)
+                                      .add(GenerateMemoriesSet());
+                                },),
+                              ),
+                            );
                           }
                           else {
                             return Center(child: Text('Something goes wrong'),);
