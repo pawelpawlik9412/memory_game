@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:memory_game/bloc/memories_set_bloc.dart';
+import 'package:memory_game/bloc/stopwatch_bloc.dart';
 import 'package:memory_game/constants/enums.dart';
 import 'package:memory_game/size_config.dart';
 
@@ -25,6 +26,7 @@ class MemoryCard extends StatelessWidget {
           if (cardState == CardState.Hidden) {
             BlocProvider.of<MemoriesSetBloc>(context)
                 .add(ChosseMemoryFromSet(id));
+            BlocProvider.of<StopwatchBloc>(context).add(StartedStopwatch());
           }
         },
         child: cardState == CardState.Guessed ? _guessedCard() : _notGuessedCard(),
