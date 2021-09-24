@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:memory_game/bloc/memories_set_bloc.dart';
+import 'package:memory_game/data/database_helper.dart';
+import 'package:memory_game/model/score.dart';
+import 'package:memory_game/utils.dart';
 
 part 'stopwatch_event.dart';
 part 'stopwatch_state.dart';
@@ -13,6 +16,8 @@ class StopwatchBloc extends Bloc<StopwatchEvent, StopwatchState> {
   bool stopped = false;
   MemoriesSetBloc memoriesSetBloc;
   StreamSubscription streamSubscription;
+  DatabaseHelper _databaseHelper = DatabaseHelper.db;
+
 
   StopwatchBloc(this.memoriesSetBloc) : super(StopwatchInitial(duration)) {
     streamSubscription = memoriesSetBloc.stream.listen((memoriesState) {
@@ -46,7 +51,7 @@ class StopwatchBloc extends Bloc<StopwatchEvent, StopwatchState> {
     if(event is PausedStopwatch) {
       stopped = true;
       var now = DateTime.now();
-      print([duration, now.toString(),]);
+      _databaseHelper.insertScore(Score(playerName: 'Pawel', time: duration, timeMinutesFormat: milisecondsConvetter(duration), date: getFormatDate(now), fullDate: now.toString(),),);
       yield StopwatchFinnish(duration);
     }
   }
