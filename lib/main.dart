@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:memory_game/bloc/memories_set_bloc.dart';
+import 'package:memory_game/bloc/score_bloc.dart';
 import 'package:memory_game/bloc/stopwatch_bloc.dart';
+import 'package:memory_game/data/database_helper.dart';
 import 'package:memory_game/game_logic.dart';
 import 'package:memory_game/screens/home_page.dart';
 import 'package:memory_game/size_config.dart';
@@ -24,6 +26,9 @@ class MemoryGame extends StatelessWidget {
             create: (context) => StopwatchBloc(
               BlocProvider.of<MemoriesSetBloc>(context),
             ),
+          ),
+          BlocProvider<ScoreBloc>(
+            create: (context) => ScoreBloc(DatabaseHelper.db),
           ),
         ],
         child: LayoutBuilder(

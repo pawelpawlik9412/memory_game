@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:memory_game/bloc/score_bloc.dart';
 import 'package:memory_game/screens/game_page.dart';
 import 'package:memory_game/screens/score_page.dart';
 import 'package:memory_game/screens/settings_page.dart';
@@ -28,6 +30,7 @@ class _HomePageState extends State<HomePage> {
       return GamePage();
     }
     else if(_currentPage == 1) {
+      BlocProvider.of<ScoreBloc>(context).add(GetScores());
       return ScorePage();
     }
     else if(_currentPage == 2) {
