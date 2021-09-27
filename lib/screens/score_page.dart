@@ -22,7 +22,6 @@ class ScorePage extends StatelessWidget {
               flex: 7,
               child: BlocBuilder<ScoreBloc, ScoreState>(
                 builder: (context, state) {
-                  print(state);
                   if (state is ScoresLoaded) {
                     List<Score> listScores = state.listScores;
                     return Container(
