@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:memory_game/bloc/memories_set_bloc.dart';
+import 'package:memory_game/bloc/name_preferences_bloc.dart';
 import 'package:memory_game/bloc/score_bloc.dart';
 import 'package:memory_game/bloc/stopwatch_bloc.dart';
 import 'package:memory_game/data/database_helper.dart';
+import 'package:memory_game/data/preferences_repository.dart';
 import 'package:memory_game/game_logic.dart';
 import 'package:memory_game/screens/home_page.dart';
+import 'package:memory_game/screens/page_manager.dart';
 import 'package:memory_game/size_config.dart';
 
 void main() {
@@ -30,13 +33,16 @@ class MemoryGame extends StatelessWidget {
           BlocProvider<ScoreBloc>(
             create: (context) => ScoreBloc(DatabaseHelper.db),
           ),
+          BlocProvider<NamePreferencesBloc>(
+            create: (context) => NamePreferencesBloc(PreferencesRepository.instance),
+          ),
         ],
         child: LayoutBuilder(
           builder: (context, constraints) {
             return OrientationBuilder(
               builder: (context, orientation) {
                 SizeConfig().init(constraints, orientation);
-                return HomePage();
+                return PageManager();
               },
             );
           },

@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:memory_game/bloc/memories_set_bloc.dart';
 import 'package:memory_game/data/database_helper.dart';
+import 'package:memory_game/data/preferences_repository.dart';
 import 'package:memory_game/model/score.dart';
 import 'package:memory_game/utils.dart';
 
@@ -11,17 +12,16 @@ part 'stopwatch_event.dart';
 part 'stopwatch_state.dart';
 
 class StopwatchBloc extends Bloc<StopwatchEvent, StopwatchState> {
-
   static int duration = 0;
   bool stopped = false;
   MemoriesSetBloc memoriesSetBloc;
   StreamSubscription streamSubscription;
   DatabaseHelper _databaseHelper = DatabaseHelper.db;
-
+  PreferencesRepository _preferencesRepository = PreferencesRepository.instance;
 
   StopwatchBloc(this.memoriesSetBloc) : super(StopwatchInitial(duration)) {
     streamSubscription = memoriesSetBloc.stream.listen((memoriesState) {
-      if(memoriesState is MemoriesFinished) {
+      if (memoriesState is MemoriesFinished) {
         add(PausedStopwatch());
       }
     });
@@ -38,7 +38,7 @@ class StopwatchBloc extends Bloc<StopwatchEvent, StopwatchState> {
       }
     }
     if (event is TickedStopwatch) {
-      if(!stopped) {
+      if (!stopped) {
         duration++;
         yield StopwatchRunningInProgress(duration);
         await Future<void>.delayed(const Duration(milliseconds: 1));
@@ -48,10 +48,19 @@ class StopwatchBloc extends Bloc<StopwatchEvent, StopwatchState> {
         yield StopwatchInitial(duration);
       }
     }
-    if(event is PausedStopwatch) {
+    if (event is PausedStopwatch) {
       stopped = true;
       var now = DateTime.now();
-      _databaseHelper.insertScore(Score(playerName: 'Pawel', time: duration, timeMinutesFormat: milisecondsConvetter(duration), date: getFormatDate(now), fullDate: now.toString(),),);
+      String playerName = await _preferencesRepository.readNamePreferences();
+      _databaseHelper.insertScore(
+        Score(
+          playerName: playerName,
+          time: duration,
+          timeMinutesFormat: milisecondsConvetter(duration),
+          date: getFormatDate(now),
+          fullDate: now.toString(),
+        ),
+      );
       yield StopwatchFinnish(duration);
     }
   }

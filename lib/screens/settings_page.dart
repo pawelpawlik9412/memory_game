@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:memory_game/bloc/name_preferences_bloc.dart';
 import 'package:memory_game/bloc/score_bloc.dart';
 import 'package:memory_game/size_config.dart';
 import 'package:memory_game/custom_widgets/gradient_button.dart';
 import 'package:memory_game/custom_widgets/user_name_form_field.dart';
 
 class SettingsPage extends StatelessWidget {
-
   final TextEditingController _userNameController = TextEditingController();
 
   @override
@@ -30,8 +30,11 @@ class SettingsPage extends StatelessWidget {
                     horizontal: SizeConfig.widthMultiplier * 5),
                 child: Column(
                   children: [
-                    PlayerSettingsSegment(userNameController: _userNameController),
-                    SizedBox(height: SizeConfig.textMultiplier * 2,),
+                    PlayerSettingsSegment(
+                        userNameController: _userNameController),
+                    SizedBox(
+                      height: SizeConfig.textMultiplier * 2,
+                    ),
                     GameSettingsSegment(),
                   ],
                 ),
@@ -80,7 +83,6 @@ class SettingsPage extends StatelessWidget {
 }
 
 class GameSettingsSegment extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -110,8 +112,10 @@ class GameSettingsSegment extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            GradientButton(label: 'Reset', onPressed: () {
-              BlocProvider.of<ScoreBloc>(context).add(ClearScoreBoard());
+            GradientButton(
+              label: 'Reset',
+              onPressed: () {
+                BlocProvider.of<ScoreBloc>(context).add(ClearScoreBoard());
               },
             )
           ],
@@ -122,11 +126,11 @@ class GameSettingsSegment extends StatelessWidget {
 }
 
 class PlayerSettingsSegment extends StatelessWidget {
-
   final TextEditingController userNameController;
 
-  PlayerSettingsSegment({@required  this.userNameController,});
-
+  PlayerSettingsSegment({
+    @required this.userNameController,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -153,13 +157,33 @@ class PlayerSettingsSegment extends StatelessWidget {
           children: [
             UserNameFormField(
               userNameController: userNameController,
+              hintText:
+                  BlocProvider.of<NamePreferencesBloc>(context).state.props[0],
             ),
             SizedBox(
               height: SizeConfig.heightMultiplier * 1.5,
             ),
             GradientButton(
               label: 'Change',
-              onPressed: () {
+              onPressed: () async {
+                BlocProvider.of<NamePreferencesBloc>(context).add(
+                  NameChanged(userNameController.text),
+                );
+                final snackBar = SnackBar(
+                  backgroundColor: Colors.tealAccent,
+                  content: Text(
+                    'You changed your username to ${userNameController.text}',
+                    style: TextStyle(
+                      fontSize: SizeConfig.textMultiplier * 3.5,
+                      fontFamily: 'Caveat',
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                await Future<void>.delayed(const Duration(seconds: 1));
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
               },
             ),
           ],
@@ -168,6 +192,3 @@ class PlayerSettingsSegment extends StatelessWidget {
     );
   }
 }
-
-
-

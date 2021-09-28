@@ -3,9 +3,11 @@ import 'package:memory_game/size_config.dart';
 
 class UserNameFormField extends StatelessWidget {
   final TextEditingController userNameController;
+  final hintText;
 
   UserNameFormField({
     @required this.userNameController,
+    this.hintText,
   });
 
   @override
@@ -20,11 +22,17 @@ class UserNameFormField extends StatelessWidget {
           return null;
         },
         style: TextStyle(
-          fontSize: SizeConfig.textMultiplier * 2,
+          fontFamily: 'Caveat',
+          fontSize: SizeConfig.textMultiplier * 3,
         ),
         decoration: InputDecoration(
-          hintText: userNameController.text,
-          hintStyle: TextStyle(fontSize: SizeConfig.textMultiplier * 2),
+          hintText: hintText == ''
+              ? 'Your Name'
+              : hintText,
+          hintStyle: TextStyle(
+            fontSize: SizeConfig.textMultiplier * 3,
+            fontFamily: 'Caveat',
+          ),
           focusColor: Colors.tealAccent,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30.0),
